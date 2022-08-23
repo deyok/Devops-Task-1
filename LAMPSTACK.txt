@@ -1,0 +1,73 @@
+On AWS Ubuntu
+
+
+INSTALL APACHE
+sudo su
+apt update
+apt install apache2
+test the public IP address 
+
+INSTALL MY SQL
+apt install mysql-server
+mysql_secure_installation
+if failed, go to mysql
+enter ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password by 'lampstack@123';
+after query ok
+rerun ; mysql_secure_installation
+enter same password as above, then yes to remove anonymous user, test database, disable remote root logins and load these new rules
+enter mysql -u root -p and enter same password
+
+INSTALL PHP
+apt install php libapache2-mod-php php-mysql
+
+sudo systemctl restart apache2
+
+TO MAKE A VIRTUAL HOST
+
+sudo mkdir /var/www/your_domain(exercise)
+sudo chown -R $USER:$USER /var/www/exercise
+sudo chmod -R 755 /var/www/your_domain
+nano /var/www/exercise/index.html
+
+enter and save below
+
+<html>
+    <head>
+        <title>Welcome to Exercise!</title>
+    </head>
+    <body>
+        <h1>Success!  The your_domain server block is working!</h1>
+    </body>
+</html>
+
+
+nano /etc/apache2/sites-available/exercise.conf
+
+enter and save below
+
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    ServerName exercise
+    ServerAlias www.exercise
+    DocumentRoot /var/www/exercise
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+a2ensite exercise.conf
+a2dissite 000-default.conf
+apache2ctl configtest
+sudo systemctl restart apache2
+
+Testing PHP on webserver
+
+nano /var/www/exercise/info.php
+
+add info and save:
+
+<?php
+phpinfo();
+
+run http:// myserverip/info.php
+
+
