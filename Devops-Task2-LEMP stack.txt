@@ -1,0 +1,45 @@
+LEMP stack CONFIGURATION USING UBUNTU
+1.	INSTALL NGINX
+sudo su
+apt update
+apt install nginx
+ufw allow 'Nginx HTTP'
+ufw enable
+ufw nginx status
+
+Displays 
+Output : “status active”
+test the public IP address
+
+2.	INSTALL MY SQL
+apt install mysql-server
+mysql_secure_installation
+if failed, go to mysql
+enter ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password by 'password';
+after query ok
+rerun ; mysql_secure_installation
+enter same password as above, then yes to remove anonymous user, test database, disable remote root logins and load these new rules
+enter mysql -u root -p and enter same password
+Check the authentication methods employed by each of your users again to confirm that root no longer authenticates using the auth_socket plugin:
+
+SELECT user,authentication_string,plugin,host FROM mysql.user;
+mysql> exit
+
+
+3.	INSTALL PHP
+apt install php-fpm php-mysql
+nano /etc/nginx/sites-available/exercise
+(note the php version)
+enter 
+ln -s /etc/nginx/sites-available/exercise /etc/nginx/sites-enabled/
+unlink /etc/nginx/sites-enabled/default
+ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+nginx -t
+systemctl reload nginx
+
+4.	CREATING A PHP FILE TO TEST CONFIGURATION
+nano /var/www/html/info.php
+enter, save and exit:
+<?php
+phpinfo();
+
