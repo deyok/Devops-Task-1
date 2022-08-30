@@ -1,0 +1,16 @@
+INSTALLATION OF MYSQL-SERVER & MYSQL-CLIENT
+
+STEP 1 - Update the OS 
+sudo apt update 
+sudo apt upgrade
+
+STEP2 - Install mysql-server and mysql-client
+sudo apt install mysql-server mysql-client
+
+STEP 3 - Set mysql root password
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+FLUSH PRIVILEGES;
+exit
+
+STEP 4 - Create a sample database in sql
+show databases;
